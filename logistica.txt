@@ -1,0 +1,5 @@
+NuevaYork Boston  240 300 360 420
+Londres Manchester 120 150 180 210
+Paris Lyon 150 180 210 240
+LosAngeles SanFrancisco 360 420 480 540
+Tokio Osaka 150 180 210 240
