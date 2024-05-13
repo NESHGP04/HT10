@@ -28,7 +28,7 @@ def seleccionar_condicion():
 
 # Leer el archivo y crear el grafo basado en la condición seleccionada
 index_tiempo = seleccionar_condicion()
-G = leer_grafo_desde_archivo('datos.txt', index_tiempo)
+G = leer_grafo_desde_archivo('logistica.txt', index_tiempo)
 
 print("Nodos:", G.nodes())
 print("Aristas:", G.edges(data=True))
