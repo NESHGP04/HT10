@@ -1,5 +1,7 @@
+from unittest.mock import patch
 import networkx as nx
 import numpy as np
+import pytest as pt
 
 def leer_grafo_desde_archivo(file_path, index_tiempo):
     G = nx.Graph()
@@ -110,3 +112,56 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+###TEST###
+    #Centro Matriz
+@pt.fixture
+def grafo_vacio():
+    def grafo_ejemplo():
+        G = nx.Graph()
+        G.add_weighted_edges_from([
+            ('A', 'B', 1),
+            ('B', 'C', 2),
+            ('A', 'C', 3)
+        ])
+        return G
+
+def test_calcular_centro_y_matriz(grafo_ejemplo):
+    centro, excentricidad_centro, distance_matrix = calcular_centro_y_matriz(grafo_ejemplo)
+    assert centro == 'B'
+    assert excentricidad_centro == 1
+    assert np.array_equal(distance_matrix, np.array([
+        [0, 1, 3],
+        [1, 0, 2],
+        [3, 2, 0]
+    ]))
+
+    #Modificar Grafo
+@pt.fixture
+def grafo_ejemplo():
+    G = nx.Graph()
+    G.add_edge('A', 'B', weight=1)
+    return G
+
+@patch('builtins.input')
+def test_modificar_grafo_interrumpir_trafico(input_mock, grafo_ejemplo):
+    input_mock.side_effect = ['a', 'A', 'B']
+    modificar_grafo(grafo_ejemplo)
+    assert not grafo_ejemplo.has_edge('A', 'B')
+
+@patch('builtins.input')
+def test_modificar_grafo_nueva_conexion(input_mock, grafo_ejemplo):
+    input_mock.side_effect = ['b', 'A', 'C', '1 2 3 4']
+
+    modificar_grafo(grafo_ejemplo)
+    assert grafo_ejemplo.has_edge('A', 'C')
+    assert grafo_ejemplo['A']['C']['weight'] == 1
+    assert grafo_ejemplo['A']['C']['weights'] == [1, 2, 3, 4]
+
+@patch('builtins.input')
+def test_modificar_grafo_actualizar_tiempos(input_mock, grafo_ejemplo):
+    grafo_ejemplo.add_edge('A', 'C', weight=1, weights=[1, 2, 3, 4])
+    input_mock.side_effect = ['c', 'A', 'C', '5 6 7 8']
+    modificar_grafo(grafo_ejemplo)
+    assert grafo_ejemplo['A']['C']['weight'] == 5
+    assert grafo_ejemplo['A']['C']['weights'] == [5, 6, 7, 8]
