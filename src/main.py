@@ -42,7 +42,7 @@ def calcular_centro_y_matriz(G):
     centro = min(excentricidad, key=excentricidad.get)
     return centro, excentricidad[centro], distance_matrix
 
-def modificar_grafo(G):
+def modificar_grafo(G, index_tiempo):
     print("\nOpciones de modificación:")
     print("a. Interrumpir tráfico entre un par de ciudades")
     print("b. Establecer una nueva conexión entre ciudades")
@@ -62,8 +62,8 @@ def modificar_grafo(G):
     elif opcion == 'b':
         tiempos = input("Ingrese los tiempos de viaje para las condiciones normal, lluvia, nieve y tormenta separados por espacio: ")
         tiempos = list(map(int, tiempos.split()))
-        # Asignamos el tiempo bajo condición normal como el peso por defecto para simplificar
-        G.add_edge(origen, destino, weight=tiempos[0], weights=tiempos)
+        # Asignamos el tiempo
+        G.add_edge(origen, destino, weight=tiempos[index_tiempo], weights=tiempos)
         print(f"Nueva conexión establecida entre {origen} y {destino} con tiempos {tiempos}.")
 
     elif opcion == 'c':
@@ -72,7 +72,7 @@ def modificar_grafo(G):
             tiempos = list(map(int, tiempos.split()))
             # Actualizamos los tiempos de viaje, pero mantenemos el peso actual como el tiempo normal
             G[origen][destino]['weights'] = tiempos
-            G[origen][destino]['weight'] = tiempos[0]
+            G[origen][destino]['weight'] = tiempos[index_tiempo]
             print(f"Tiempos de viaje actualizados entre {origen} y {destino} a {tiempos}.")
         else:
             print("No existe conexión entre las ciudades especificadas.")
@@ -103,7 +103,7 @@ def main():
             centro, excentricidad_centro, distance_matrix = calcular_centro_y_matriz(G)
             print(f"\nEl centro del grafo es: {centro}, con una excentricidad de {excentricidad_centro}")
         elif opcion == '3':
-            modificar_grafo(G)
+            modificar_grafo(G, index_tiempo)
         elif opcion == '4':
             print("Saliendo del programa.")
             break
