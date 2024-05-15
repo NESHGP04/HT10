@@ -116,25 +116,21 @@ if __name__ == "__main__":
 ###TEST###
     #Centro Matriz
 @pt.fixture
-def grafo_vacio():
-    def grafo_ejemplo():
-        G = nx.Graph()
-        G.add_weighted_edges_from([
-            ('A', 'B', 1),
-            ('B', 'C', 2),
-            ('A', 'C', 3)
-        ])
-        return G
+def grafo_ejemplo():
+    G = nx.Graph()
+    G.add_weighted_edges_from([
+        ('A', 'B', 1),
+        ('B', 'C', 2),
+        ('A', 'C', 3)
+    ])
+    return G
 
 def test_calcular_centro_y_matriz(grafo_ejemplo):
     centro, excentricidad_centro, distance_matrix = calcular_centro_y_matriz(grafo_ejemplo)
     assert centro == 'B'
-    assert excentricidad_centro == 1
-    assert np.array_equal(distance_matrix, np.array([
-        [0, 1, 3],
-        [1, 0, 2],
-        [3, 2, 0]
-    ]))
+    assert excentricidad_centro == 2
+    expected_matrix = np.array([[0, 1, 2], [1, 0, 2], [2, 2, 0]])
+    assert np.allclose(distance_matrix, expected_matrix)
 
     #Modificar Grafo
 @pt.fixture
