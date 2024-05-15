@@ -80,7 +80,7 @@ def modificar_grafo(G):
 def main():
     # Leer el archivo y crear el grafo basado en la condición seleccionada
     index_tiempo = seleccionar_condicion()
-    G = leer_grafo_desde_archivo('logistica.txt', index_tiempo)
+    G = leer_grafo_desde_archivo('./data/logistica.txt', index_tiempo)
 
     while True:
         print("\nMenú de opciones:")
